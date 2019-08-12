@@ -1,30 +1,44 @@
 # python_morph v.0.1.0
 
 ## What?
-For those that don't like the one-liner awk or perl options, this is a command line tool to help manage your string transformations through a yaml config file and some understanding of regular expressions.
+
+For those that don't like the one-liner awk or perl options, this is a command
+line tool to help manage your string transformations through a yaml config file
+and some understanding of regular expressions.
 
 There are 2 ways the string transformations will be handled:
-1) CLI args for one ad-hoc transformations
-2) YAML configs with order of precedence
-... 1 - local directory
-... 2 - ~/.morph.conf
-... 3 - /usr/local/etc
 
-Argument lists and stdin are both acceptable ways to input the string(s) to be transformed.
+1. YAML configuration with an order of precedence:
+
+    1. environment variable (MORPH_CONFIG) set to configuration file location
+    2. home directory with a .morph.yaml file
+    3. /usr/local/etc/morph.yaml
+
+2. CLI args for single ad-hoc transformations
+
+Argument lists and stdin are both acceptable ways to input the string(s) to be
+transformed.
 
 ## Why?
-A number of my team members do not have software development skills, but they are proficient on the command line. In their daily operations tasks they often have to correct data issues that required simple string transformations. Also, they may be called on to perform a set of batch string transformations. This tool is intended to help them simplify these tasks and hopefully increase their productivity.
+
+A number of my ops team members do not have a software development background,
+but they are proficient on the command line. In their daily operations tasks
+they often have to correct data issues that required simple stringo
+transformations. Also, they may be called on to perform a set of batch string
+transformations in their daily tasks. This tool is intended to help them
+simplify these tasks and hopefully increase their productivity.
 
 ### Usage
 
 TODO
 
 ### Examples
-```
+
+```bash
 $ echo "test123test" | morph --from "123" --to "456"
 test456test
 
-$ morph --from "123" --to "456" "test123test" 
+$ morph --from "123" --to "456" "test123test"
 test456test
 
 $ echo "test123test" | morph --from "\d+" --to "789"
@@ -35,18 +49,21 @@ test789regex
 ```
 
 ### Configuration
-3) YAML config with order of precedence
-... 1 - local directory
-... 2 - ~/.morph.conf
-... 3 - /usr/local/etc
+
+YAML config with order of precedence:
+
+1. environment variable (MORPH_CONFIG) set to configuration file location
+2. home directory with a .morph.yaml file
+3. /usr/local/etc/morph.yaml
 
 ### Installation
 
 TODO
 
 ### Testing
-```
-$ python setup.py test
+
+```python
+python setup.py test
 ```
 
 ## Requirements
@@ -60,5 +77,5 @@ TODO
 ## Licence
 
 ## Authors
-`python_morph` was written by `Greg Horie <networkserf@gmail.com>`_.
 
+`python_morph` was written by `Greg Horie <networkserf@gmail.com>`
