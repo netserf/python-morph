@@ -19,6 +19,7 @@ transformed.
 from pathlib import Path
 import os
 import re
+import yaml
 
 
 def get_config_filename():
@@ -46,3 +47,12 @@ def run_subs(sub_rules, instr):
         if rule['match'].match(instr):
             return re.sub(rule['match'], rule['replace'], instr)
     return None
+
+def parse_config(configfile):
+    '''parse config file and return it as a set of rules that will be used in
+    the match/replace logic'''
+    with open(configfile, 'r') as infile:
+        config = yaml.safe_load(infile)
+    for rule in config['substitutions']:
+        rule['match'] = re.compile(rule['match'])
+    return config

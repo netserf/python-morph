@@ -1,0 +1,17 @@
+---
+substitutions:
+
+    - name: Rule 0
+      help: A simple match / replace rule 
+      match: match rule 0
+      replace: test 0
+
+    - name: Rule 1
+      help: A match/replace rule with a group match
+      match: match rule 2 (.*) done
+      replace: \1
+
+    - name: Rule 2
+      help: A match/replace rule with 2 group matches
+      match: match rule 2 (.*) more\s+complex (.*) done
+      replace: \1 \2
