@@ -18,6 +18,7 @@ transformed.
 
 from pathlib import Path
 import os
+import re
 
 
 def get_config_filename():
@@ -35,3 +36,10 @@ def get_config_filename():
     if envfile:
         configfile = envfile
     return configfile
+
+
+def run_subs(sub_rules, input):
+    for rule in sub_rules:
+        if rule['match'].match(input):
+            return re.sub(rule['match'], rule['replace'], input)
+    return None

@@ -4,6 +4,8 @@ Test suite for the morph command line tool.
 
 from pathlib import Path
 import os
+import re
+import pytest
 from unittest.mock import patch
 
 import python_morph.morph as morph
@@ -29,7 +31,30 @@ def test_get_config_filename_from_home():
             mock_is_file.assert_called()
             assert config == '/home/user/.morph.yaml'
 
+
 def test_get_config_from_global():
     '''test that config file has its global location set'''
     config = morph.get_config_filename()
     assert config == '/usr/local/etc/morph.yaml'
+
+instr_list = [
+    ('match rule 0', 'test 0'),
+    ('match rule 1 YES1 done', 'test 1 - YES1'),
+    ('match rule 2 YES2 done', 'YES2'),
+    ('match rule 3 YES more    complex YES3', 'YES3'),
+    ('match rule 4 YES4.1 more    complex YES4.2 done', 'YES4.1 YES4.2'),
+    ('match rule 5 NO MATCHES FOUND', None)
+]
+instr_ids = [f'match rule {n}' for n, _ in enumerate(instr_list)]
+@pytest.mark.parametrize('instr,expected', instr_list, ids=instr_ids)
+def test_run_subs_with_small_sub_rules_list(instr, expected):
+    '''test that batch substitution rules run as expected'''
+    sub_rules = [
+        {'match': re.compile(r'match rule 0'), 'replace': r'test 0' },
+        {'match': re.compile(r'match rule 1 (.*) done'), 'replace': r'test 1 - \1' },
+        {'match': re.compile(r'match rule 2 (.*) done'), 'replace': r'\1' },
+        {'match': re.compile(r'match rule 3 (.*) more\s+complex (.*)'), 'replace': r'\2' },
+        {'match': re.compile(r'match rule 4 (.*) more\s+complex (.*) done'), 'replace': r'\1 \2' },
+    ]
+    assert morph.run_subs(sub_rules, instr) == expected
+    
