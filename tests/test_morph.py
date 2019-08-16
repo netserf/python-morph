@@ -17,7 +17,7 @@ def test_get_config_filename_from_env():
     del os.environ['CONFIG_FILE']
 
 
-def test_get_config_filename_home_called():
+def test_get_config_filename_from_home():
     with patch.object(Path, 'home', return_value='/home/user') as mock_home:
         with patch.object(Path, 'is_file', return_value=True) as mock_is_file:
             config = morph.get_config_filename()
@@ -25,3 +25,6 @@ def test_get_config_filename_home_called():
             mock_is_file.assert_called()
             assert config == '/home/user/.morph.yaml'
 
+def test_get_config_from_global():
+    config = morph.get_config_filename()
+    assert config == '/usr/local/etc/morph.yaml'
