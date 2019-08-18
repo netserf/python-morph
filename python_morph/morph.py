@@ -21,30 +21,37 @@ import os
 import re
 import yaml
 import click
+import fileinput
 
 @click.command()
 @click.option('-m', '--match', 'match_pattern')
 @click.option('-r', '--replace', 'replace_pattern')
-@click.argument('strings', nargs=-1)
-def main(match_pattern, replace_pattern, strings):
+@click.argument('cli_args', nargs=-1)
+def main(match_pattern, replace_pattern, cli_args):
     '''A tool to help manage string transformations through a yaml config file
     and some understanding of regular expressions.'''
     if match_pattern and replace_pattern:
-        _cli_adhoc(match_pattern, replace_pattern, strings)
+        _cli_adhoc(match_pattern, replace_pattern, cli_args)
     #config = get_config_filename()
 
-
-def _cli_adhoc(match_pattern, replace_pattern, strings):
+# TODO ... make this into a rules generator only
+def _cli_adhoc(match_pattern, replace_pattern, cli_args):
     '''helper method for processing ad-hoc cli match/replace requests'''
     sub_rules = {
         'substitutions': [
             {'match': re.compile(match_pattern), 'replace': replace_pattern}
         ]
     }
-    for instr in strings:
-        out = run_subs(sub_rules, instr)
-        click.echo(out)
-
+    # process piped stdin input
+    if cli_args[-1] == "-":
+        with click.open_file('-', mode='r') as infile:
+            for instr in infile:
+                out = run_subs(sub_rules, instr.rstrip())
+                click.echo(out)
+    else:
+        for instr in cli_args:
+            out = run_subs(sub_rules, instr)
+            click.echo(out)
 
 def get_config_filename():
     ''' config file order of precedence is:

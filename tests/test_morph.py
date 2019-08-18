@@ -71,19 +71,24 @@ def test_parse_config_file_no_file():
 
 
 CLI_LIST = [
-    (['--match', 'testmatch', '--replace', 'replaced', 'testmatch'], 'replaced\n'),
-    (['--match', r'test(.*)', '--replace', r'\1', 'testreplaced2'], 'replaced2\n')
+    (['--match', 'testmatch', '--replace', 'replaced', 'testmatch'],
+        'replaced\n'),
+    (['--match', r'test(.*)', '--replace', r'\1', 'testreplaced2'],
+        'replaced2\n'),
+    (['--match', r'test(.*)', '--replace', r'\1', 'testreplaced3', 'testreplaced4'],
+        'replaced3\nreplaced4\n'),
 ]
 CLI_IDS = [f'cli test {n}' for n, _ in enumerate(CLI_LIST)]
 
 @pytest.mark.parametrize('cli_input,expected', CLI_LIST, ids=CLI_IDS)
-def test_cli_adhoc_sub(cli_input, expected):
+def test_cli_adhoc_sub_regular_args_input(cli_input, expected):
     '''test that morph cli can run ad-hoc match/replace'''
     runner = CliRunner()
     result = runner.invoke(morph.main, cli_input)
     assert result.exit_code == 0
     assert result.output == expected
 
+# TODO - figure out how to test piped stdin input stream
 """
 def test_parse_cli_single_arg():
     '''test basic cli commands'''
