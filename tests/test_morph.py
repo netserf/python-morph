@@ -6,6 +6,7 @@ from pathlib import Path
 import os
 import re
 from unittest.mock import patch
+from click.testing import CliRunner
 import pytest
 import python_morph.morph as morph
 
@@ -45,14 +46,15 @@ INSTR_LIST = [
     ('match rule 3 NO MATCHES FOUND', None)
 ]
 INSTR_IDS = [f'match rule {n}' for n, _ in enumerate(INSTR_LIST)]
+
 @pytest.mark.parametrize('instr,expected', INSTR_LIST, ids=INSTR_IDS)
 def test_run_subs_with_small_sub_rules_list(instr, expected):
     '''test that batch substitution rules run as expected'''
-    sub_rules = [
+    sub_rules = {'substitutions': [
         {'match': re.compile(r'match rule 0'), 'replace': r'test 0'},
         {'match': re.compile(r'match rule 1 (.*) done'), 'replace': r'\1'},
         {'match': re.compile(r'match rule 2 (.*) more\s+complex (.*) done'), 'replace': r'\1 \2'},
-    ]
+    ]}
     assert morph.run_subs(sub_rules, instr) == expected
 
 
@@ -66,3 +68,37 @@ def test_parse_config_file_no_file():
     '''test that missing config file wil raise an exception'''
     with pytest.raises(FileNotFoundError):
         morph.parse_config('not_a_file.yaml')
+
+
+CLI_LIST = [
+    (['--match', 'testmatch', '--replace', 'replaced', 'testmatch'], 'replaced\n'),
+    (['--match', r'test(.*)', '--replace', r'\1', 'testreplaced2'], 'replaced2\n')
+]
+CLI_IDS = [f'cli test {n}' for n, _ in enumerate(CLI_LIST)]
+
+@pytest.mark.parametrize('cli_input,expected', CLI_LIST, ids=CLI_IDS)
+def test_cli_adhoc_sub(cli_input, expected):
+    '''test that morph cli can run ad-hoc match/replace'''
+    runner = CliRunner()
+    result = runner.invoke(morph.main, cli_input)
+    assert result.exit_code == 0
+    assert result.output == expected
+
+"""
+def test_parse_cli_single_arg():
+    '''test basic cli commands'''
+    runner = CliRunner()
+    result = runner.invoke(morph.main, ['Peter'])
+    print(result.output)
+    assert result.exit_code == 0
+    assert result.output == 'Hello Peter!\n'
+"""
+"""
+def test_parse_cli_multi_args():
+    '''test basic cli commands'''
+    runner = CliRunner()
+    result = runner.invoke(morph.main, ['Peter', 'Jane'])
+#    print(result.output)
+    assert result.exit_code == 0
+    assert result.output == 'Hello Peter!\nHello Jane!\n'
+"""

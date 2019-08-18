@@ -20,6 +20,30 @@ from pathlib import Path
 import os
 import re
 import yaml
+import click
+
+@click.command()
+@click.option('-m', '--match', 'match_pattern')
+@click.option('-r', '--replace', 'replace_pattern')
+@click.argument('strings', nargs=-1)
+def main(match_pattern, replace_pattern, strings):
+    '''A tool to help manage string transformations through a yaml config file
+    and some understanding of regular expressions.'''
+    if match_pattern and replace_pattern:
+        _cli_adhoc(match_pattern, replace_pattern, strings)
+    #config = get_config_filename()
+
+
+def _cli_adhoc(match_pattern, replace_pattern, strings):
+    '''helper method for processing ad-hoc cli match/replace requests'''
+    sub_rules = {
+        'substitutions': [
+            {'match': re.compile(match_pattern), 'replace': replace_pattern}
+        ]
+    }
+    for instr in strings:
+        out = run_subs(sub_rules, instr)
+        click.echo(out)
 
 
 def get_config_filename():
@@ -43,7 +67,7 @@ def run_subs(sub_rules, instr):
     '''take substitution rules tuple {match, replace}, and see if input matches.
     If match, then replace.
     '''
-    for rule in sub_rules:
+    for rule in sub_rules['substitutions']:
         if rule['match'].match(instr):
             return re.sub(rule['match'], rule['replace'], instr)
     return None
@@ -56,3 +80,6 @@ def parse_config(configfile):
     for rule in config['substitutions']:
         rule['match'] = re.compile(rule['match'])
     return config
+
+if __name__ == '__main__':
+    main()
