@@ -21,7 +21,7 @@ import os
 import re
 import yaml
 import click
-import fileinput
+
 
 @click.command()
 @click.option('-m', '--match', 'match_pattern')
@@ -30,14 +30,12 @@ import fileinput
 def main(match_pattern, replace_pattern, cli_args):
     '''A tool to help manage string transformations through a yaml config file
     and some understanding of regular expressions.'''
-    config = get_config_filename()
-    sub_rules = _get_cli_adhoc_rules(match_pattern, replace_pattern)
+    sub_rules = _generate_cli_adhoc_rules(match_pattern, replace_pattern)
+    config = _get_config_filename()
     if not sub_rules:
         sub_rules = _parse_config(config)
-    _process_input(sub_rules, cli_args)     
+    _process_input(sub_rules, cli_args)
 
-#    if match_pattern and replace_pattern:
-#        _cli_adhoc(match_pattern, replace_pattern, cli_args)
 
 def _generate_cli_adhoc_rules(match_pattern, replace_pattern):
     '''helper method for processing ad-hoc cli match/replace requests'''
@@ -49,8 +47,8 @@ def _generate_cli_adhoc_rules(match_pattern, replace_pattern):
             ]
         }
     return sub_rules
-'''
-'''
+
+
 def _get_config_filename():
     ''' config file order of precedence is:
     1. environment variable CONFIG_FILE

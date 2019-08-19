@@ -70,29 +70,30 @@ def test_parse_config_file_no_file():
         morph._parse_config('not_a_file.yaml')
 
 RULE_LIST = [
-    (['testmatch', 'replaced', 'testmatch'],
+    (['testmatch', 'replaced', 'testmatch'], \
         {'substitutions': [{'match': re.compile('testmatch'), 'replace': 'replaced'}]}),
-    ([r'test(.*)', r'\1', 'testreplaced2'],
+    ([r'test(.*)', r'\1', 'testreplaced2'], \
         {'substitutions': [{'match': re.compile('test(.*)'), 'replace': '\\1'}]}),
-    ([r'test(.*)', r'\1', 'testreplaced3', 'testreplaced4'],
+    ([r'test(.*)', r'\1', 'testreplaced3', 'testreplaced4'], \
         {'substitutions': [{'match': re.compile('test(.*)'), 'replace': '\\1'}]})
 ]
 RULE_IDS = [f'rule test {n}' for n, _ in enumerate(RULE_LIST)]
 
 @pytest.mark.parametrize('rule_input,expected', RULE_LIST, ids=RULE_IDS)
 def test_generate_cli_adhoc_rules(rule_input, expected):
+    '''test substitution rules generation for ad-hoc match/replace on the cli'''
     sub_rules = morph._generate_cli_adhoc_rules(rule_input[0], rule_input[1])
     print(sub_rules)
     print(expected)
     assert sub_rules == expected
 
 CLI_LIST = [
-    (['--match', 'testmatch', '--replace', 'replaced', 'testmatch'],
+    (['--match', 'testmatch', '--replace', 'replaced', 'testmatch'], \
         'replaced\n'),
-    (['--match', r'test(.*)', '--replace', r'\1', 'testreplaced2'],
-        'replaced2\n'),
-    (['--match', r'test(.*)', '--replace', r'\1', 'testreplaced3', 'testreplaced4'],
-        'replaced3\nreplaced4\n'),
+    (['--match', r'test(.*)', '--replace', r'\1', 'testreplaced2'], \
+        'replaced2\n'), \
+    (['--match', r'test(.*)', '--replace', r'\1', 'testreplaced3', 'testreplaced4'], \
+        'replaced3\nreplaced4\n')
 ]
 CLI_IDS = [f'cli test {n}' for n, _ in enumerate(CLI_LIST)]
 
@@ -106,21 +107,3 @@ def test_cli_adhoc_sub_regular_args_input(cli_input, expected):
     assert result.output == expected
 
 # TODO - figure out how to test piped stdin input stream
-"""
-def test_parse_cli_single_arg():
-    '''test basic cli commands'''
-    runner = CliRunner()
-    result = runner.invoke(morph.main, ['Peter'])
-    print(result.output)
-    assert result.exit_code == 0
-    assert result.output == 'Hello Peter!\n'
-"""
-"""
-def test_parse_cli_multi_args():
-    '''test basic cli commands'''
-    runner = CliRunner()
-    result = runner.invoke(morph.main, ['Peter', 'Jane'])
-#    print(result.output)
-    assert result.exit_code == 0
-    assert result.output == 'Hello Peter!\nHello Jane!\n'
-"""
