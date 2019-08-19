@@ -12,15 +12,15 @@ import python_morph.morph as morph
 
 
 def test_get_config_filename_from_env():
-    '''test that config file can be set with environment variable CONFIG_FILE'''
+    '''test that config file can be set with environment variable MORPH_CONFIG'''
     # setup environment variable
     configfile = '/my/test/dir/myconfig.yaml'
-    os.environ["CONFIG_FILE"] = configfile
+    os.environ["MORPH_CONFIG"] = configfile
     # check configfile can be configured through the environment variable
     envfile = morph._get_config_filename()
     assert envfile == configfile
     # clean up environment variable
-    del os.environ['CONFIG_FILE']
+    del os.environ['MORPH_CONFIG']
 
 
 def test_get_config_filename_from_home():
@@ -98,8 +98,7 @@ CLI_LIST = [
 CLI_IDS = [f'cli test {n}' for n, _ in enumerate(CLI_LIST)]
 
 @pytest.mark.parametrize('cli_input,expected', CLI_LIST, ids=CLI_IDS)
-@pytest.mark.xfail()
-def test_cli_adhoc_sub_regular_args_input(cli_input, expected):
+def test_main_cli_input(cli_input, expected):
     '''test that morph cli can run ad-hoc match/replace'''
     runner = CliRunner()
     result = runner.invoke(morph.main, cli_input)
