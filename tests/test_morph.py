@@ -12,15 +12,15 @@ import python_morph.morph as morph
 
 
 def test_get_config_filename_from_env():
-    '''test that config file can be set with environment variable CONFIG_FILE'''
+    '''test that config file can be set with environment variable MORPH_CONFIG'''
     # setup environment variable
     configfile = '/my/test/dir/myconfig.yaml'
-    os.environ["CONFIG_FILE"] = configfile
+    os.environ["MORPH_CONFIG"] = configfile
     # check configfile can be configured through the environment variable
     envfile = morph._get_config_filename()
     assert envfile == configfile
     # clean up environment variable
-    del os.environ['CONFIG_FILE']
+    del os.environ['MORPH_CONFIG']
 
 
 def test_get_config_filename_from_home():
@@ -69,6 +69,7 @@ def test_parse_config_file_no_file():
     with pytest.raises(FileNotFoundError):
         morph._parse_config('not_a_file.yaml')
 
+
 RULE_LIST = [
     (['testmatch', 'replaced', 'testmatch'], \
         {'substitutions': [{'match': re.compile('testmatch'), 'replace': 'replaced'}]}),
@@ -87,6 +88,7 @@ def test_generate_cli_adhoc_rules(rule_input, expected):
     print(expected)
     assert sub_rules == expected
 
+
 CLI_LIST = [
     (['--match', 'testmatch', '--replace', 'replaced', 'testmatch'], \
         'replaced\n'),
@@ -98,12 +100,18 @@ CLI_LIST = [
 CLI_IDS = [f'cli test {n}' for n, _ in enumerate(CLI_LIST)]
 
 @pytest.mark.parametrize('cli_input,expected', CLI_LIST, ids=CLI_IDS)
-@pytest.mark.xfail()
-def test_cli_adhoc_sub_regular_args_input(cli_input, expected):
+def test_main_cli_thru_cli_args(cli_input, expected):
     '''test that morph cli can run ad-hoc match/replace'''
     runner = CliRunner()
     result = runner.invoke(morph.main, cli_input)
     assert result.exit_code == 0
     assert result.output == expected
 
-# TODO - figure out how to test piped stdin input stream
+
+def test_main_cli_thru_stdin():
+    '''test that morph cli can run ad-hoc match/replace on piped stdin'''
+    runner = CliRunner()
+    cli_input = ['--match', 'testmatch', '--replace', 'replaced', '-']
+    result = runner.invoke(morph.main, cli_input, input="testmatch")
+    assert result.exit_code == 0
+    assert result.output == "replaced\n"

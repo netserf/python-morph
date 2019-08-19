@@ -51,11 +51,11 @@ def _generate_cli_adhoc_rules(match_pattern, replace_pattern):
 
 def _get_config_filename():
     ''' config file order of precedence is:
-    1. environment variable CONFIG_FILE
+    1. environment variable MORPH_CONFIG
     2. $HOME/.morph.yaml
     3. /usr/local/etc/morph.yaml
     '''
-    envfile = os.getenv('CONFIG_FILE')
+    envfile = os.getenv('MORPH_CONFIG')
     homefile = Path(str(Path.home()) + "/.morph.yaml")
     globalfile = '/usr/local/etc/morph.yaml'
     configfile = globalfile
