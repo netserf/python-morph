@@ -17,7 +17,7 @@ def test_get_config_filename_from_env():
     configfile = '/my/test/dir/myconfig.yaml'
     os.environ["CONFIG_FILE"] = configfile
     # check configfile can be configured through the environment variable
-    envfile = morph.get_config_filename()
+    envfile = morph._get_config_filename()
     assert envfile == configfile
     # clean up environment variable
     del os.environ['CONFIG_FILE']
@@ -27,7 +27,7 @@ def test_get_config_filename_from_home():
     '''test that config file can be set in home directory'''
     with patch.object(Path, 'home', return_value='/home/user') as mock_home:
         with patch.object(Path, 'is_file', return_value=True) as mock_is_file:
-            config = morph.get_config_filename()
+            config = morph._get_config_filename()
             mock_home.assert_called()
             mock_is_file.assert_called()
             assert config == '/home/user/.morph.yaml'
@@ -35,7 +35,7 @@ def test_get_config_filename_from_home():
 
 def test_get_config_from_global():
     '''test that config file has its global location set'''
-    config = morph.get_config_filename()
+    config = morph._get_config_filename()
     assert config == '/usr/local/etc/morph.yaml'
 
 
@@ -55,20 +55,36 @@ def test_run_subs_with_small_sub_rules_list(instr, expected):
         {'match': re.compile(r'match rule 1 (.*) done'), 'replace': r'\1'},
         {'match': re.compile(r'match rule 2 (.*) more\s+complex (.*) done'), 'replace': r'\1 \2'},
     ]}
-    assert morph.run_subs(sub_rules, instr) == expected
+    assert morph._run_subs(sub_rules, instr) == expected
 
 
 def test_parse_config_file_collects_file_contents():
     '''test that config file can be parsed'''
-    sub_rules = morph.parse_config('tests/morph.yaml')
+    sub_rules = morph._parse_config('tests/morph.yaml')
     assert 'substitutions' in sub_rules
 
 
 def test_parse_config_file_no_file():
     '''test that missing config file wil raise an exception'''
     with pytest.raises(FileNotFoundError):
-        morph.parse_config('not_a_file.yaml')
+        morph._parse_config('not_a_file.yaml')
 
+RULE_LIST = [
+    (['testmatch', 'replaced', 'testmatch'],
+        {'substitutions': [{'match': re.compile('testmatch'), 'replace': 'replaced'}]}),
+    ([r'test(.*)', r'\1', 'testreplaced2'],
+        {'substitutions': [{'match': re.compile('test(.*)'), 'replace': '\\1'}]}),
+    ([r'test(.*)', r'\1', 'testreplaced3', 'testreplaced4'],
+        {'substitutions': [{'match': re.compile('test(.*)'), 'replace': '\\1'}]})
+]
+RULE_IDS = [f'rule test {n}' for n, _ in enumerate(RULE_LIST)]
+
+@pytest.mark.parametrize('rule_input,expected', RULE_LIST, ids=RULE_IDS)
+def test_generate_cli_adhoc_rules(rule_input, expected):
+    sub_rules = morph._generate_cli_adhoc_rules(rule_input[0], rule_input[1])
+    print(sub_rules)
+    print(expected)
+    assert sub_rules == expected
 
 CLI_LIST = [
     (['--match', 'testmatch', '--replace', 'replaced', 'testmatch'],
@@ -81,6 +97,7 @@ CLI_LIST = [
 CLI_IDS = [f'cli test {n}' for n, _ in enumerate(CLI_LIST)]
 
 @pytest.mark.parametrize('cli_input,expected', CLI_LIST, ids=CLI_IDS)
+@pytest.mark.xfail()
 def test_cli_adhoc_sub_regular_args_input(cli_input, expected):
     '''test that morph cli can run ad-hoc match/replace'''
     runner = CliRunner()
