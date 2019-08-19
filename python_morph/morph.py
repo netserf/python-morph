@@ -21,7 +21,7 @@ import os
 import re
 import yaml
 import click
-import fileinput
+
 
 @click.command()
 @click.option('-m', '--match', 'match_pattern')
@@ -30,30 +30,26 @@ import fileinput
 def main(match_pattern, replace_pattern, cli_args):
     '''A tool to help manage string transformations through a yaml config file
     and some understanding of regular expressions.'''
-    if match_pattern and replace_pattern:
-        _cli_adhoc(match_pattern, replace_pattern, cli_args)
-    #config = get_config_filename()
+    sub_rules = _generate_cli_adhoc_rules(match_pattern, replace_pattern)
+    config = _get_config_filename()
+    if not sub_rules:
+        sub_rules = _parse_config(config)
+    _process_input(sub_rules, cli_args)
 
-# TODO ... make this into a rules generator only
-def _cli_adhoc(match_pattern, replace_pattern, cli_args):
+
+def _generate_cli_adhoc_rules(match_pattern, replace_pattern):
     '''helper method for processing ad-hoc cli match/replace requests'''
-    sub_rules = {
-        'substitutions': [
-            {'match': re.compile(match_pattern), 'replace': replace_pattern}
-        ]
-    }
-    # process piped stdin input
-    if cli_args[-1] == "-":
-        with click.open_file('-', mode='r') as infile:
-            for instr in infile:
-                out = run_subs(sub_rules, instr.rstrip())
-                click.echo(out)
-    else:
-        for instr in cli_args:
-            out = run_subs(sub_rules, instr)
-            click.echo(out)
+    sub_rules = None
+    if match_pattern and replace_pattern:
+        sub_rules = {
+            'substitutions': [
+                {'match': re.compile(match_pattern), 'replace': replace_pattern}
+            ]
+        }
+    return sub_rules
 
-def get_config_filename():
+
+def _get_config_filename():
     ''' config file order of precedence is:
     1. environment variable CONFIG_FILE
     2. $HOME/.morph.yaml
@@ -69,8 +65,20 @@ def get_config_filename():
         configfile = envfile
     return configfile
 
+def _process_input(sub_rules, cli_args):
+    # process piped stdin input
+    if cli_args[-1] == "-":
+        with click.open_file('-', mode='r') as infile:
+            for instr in infile:
+                out = _run_subs(sub_rules, instr.rstrip())
+                click.echo(out)
+    else:
+        for instr in cli_args:
+            out = _run_subs(sub_rules, instr)
+            click.echo(out)
 
-def run_subs(sub_rules, instr):
+
+def _run_subs(sub_rules, instr):
     '''take substitution rules tuple {match, replace}, and see if input matches.
     If match, then replace.
     '''
@@ -79,7 +87,7 @@ def run_subs(sub_rules, instr):
             return re.sub(rule['match'], rule['replace'], instr)
     return None
 
-def parse_config(configfile):
+def _parse_config(configfile):
     '''parse config file and return it as a set of rules that will be used in
     the match/replace logic'''
     with open(configfile, 'r') as infile:
@@ -87,6 +95,7 @@ def parse_config(configfile):
     for rule in config['substitutions']:
         rule['match'] = re.compile(rule['match'])
     return config
+
 
 if __name__ == '__main__':
     main()
