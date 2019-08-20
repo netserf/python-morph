@@ -30,7 +30,18 @@ simplify these tasks and hopefully increase their productivity.
 
 ### Usage
 
-TODO
+```bash
+$ morph --help
+Usage: morph.py [OPTIONS] [CLI_ARGS]...
+
+  A tool to help manage string transformations through a yaml config file
+  and some understanding of regular expressions.
+
+Options:
+  -m, --match TEXT
+  -r, --replace TEXT
+  --help              Show this message and exit.
+  ```
 
 ### Examples
 
@@ -56,9 +67,39 @@ YAML config with order of precedence:
 2. home directory with a .morph.yaml file
 3. /usr/local/etc/morph.yaml
 
+Configuration file example - `morph.yaml`:
+
+```yaml
+---
+substitutions:
+
+    - name: Rule 0
+      help: A simple match / replace rule
+      match: match me
+      replace: test 0
+
+    - name: Rule 1
+      help: A match/replace rule with a group match
+      match: match me (.*) done
+      replace: \1
+```
+
 ### Installation
 
-TODO
+To build the wheel file:
+
+```bash
+$ pip install --upgrade setuptools wheel
+$ pip install -r requirements-dev.txt
+$ python setup.py bdist_wheel
+```
+
+To install the package:
+
+```bash
+$ pip install -r requirements.txt
+$ pip install dist/[whl file] [--force-reinstall]
+```
 
 ### Testing
 
