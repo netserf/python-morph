@@ -6,9 +6,9 @@ There are 2 ways the string transformations will be handled:
 
 1. YAML configuration with an order of precedence:
 
-    1. environment variable (MORPH_CONFIG) set to configuration file location
-    2. home directory with a .morph.yaml file
-    3. /usr/local/etc/morph.yaml
+    1. environment variable (SARLAC_CONFIG) set to configuration file location
+    2. home directory with a .sarlac.yaml file
+    3. /usr/local/etc/sarlac.yaml
 
 2. CLI args for single ad-hoc transformations
 
@@ -21,7 +21,7 @@ import os
 import re
 import yaml
 import click
-from python_morph.__init__ import __version__
+from python_sarlac.__init__ import __version__
 
 
 @click.command()
@@ -53,13 +53,13 @@ def _generate_cli_adhoc_rules(match_pattern, replace_pattern):
 
 def _get_config_filename():
     ''' config file order of precedence is:
-    1. environment variable MORPH_CONFIG
-    2. $HOME/.morph.yaml
-    3. /usr/local/etc/morph.yaml
+    1. environment variable SARLAC_CONFIG
+    2. $HOME/.sarlac.yaml
+    3. /usr/local/etc/sarlac.yaml
     '''
-    envfile = os.getenv('MORPH_CONFIG')
-    homefile = Path(str(Path.home()) + "/.morph.yaml")
-    globalfile = '/usr/local/etc/morph.yaml'
+    envfile = os.getenv('SARLAC_CONFIG')
+    homefile = Path(str(Path.home()) + "/.sarlac.yaml")
+    globalfile = '/usr/local/etc/sarlac.yaml'
     configfile = globalfile
     if homefile.is_file():
         configfile = str(homefile)

@@ -1,4 +1,4 @@
-"""python_morph - For those that don't like the one-liner awk or perl options,
+"""python_sarlac - For those that don't like the one-liner awk or perl options,
 this is a command line tool that helps you manage your string transformations
 through a yaml config file."""
 

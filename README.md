@@ -1,4 +1,4 @@
-# python_morph v.0.2.0
+# python_sarlac v.0.2.0
 
 ## What?
 
@@ -10,9 +10,9 @@ There are 2 ways the string transformations will be handled:
 
 1. YAML configuration with an order of precedence:
 
-    1. environment variable (MORPH_CONFIG) set to configuration file location
-    2. home directory with a .morph.yaml file
-    3. /usr/local/etc/morph.yaml
+    1. environment variable (SARLAC_CONFIG) set to configuration file location
+    2. home directory with a .sarlac.yaml file
+    3. /usr/local/etc/sarlac.yaml
 
 2. CLI args for single ad-hoc transformations
 
@@ -31,8 +31,8 @@ simplify these tasks and hopefully increase their productivity.
 ### Usage
 
 ```bash
-$ morph --help
-Usage: morph.py [OPTIONS] [CLI_ARGS]...
+$ sarlac --help
+Usage: sarlac.py [OPTIONS] [CLI_ARGS]...
 
   A tool to help manage string transformations through a yaml config file
   and some understanding of regular expressions.
@@ -46,16 +46,16 @@ Options:
 ### Examples
 
 ```bash
-$ echo "test123test" | morph --from "123" --to "456"
+$ echo "test123test" | sarlac --from "123" --to "456"
 test456test
 
-$ morph --from "123" --to "456" "test123test"
+$ sarlac --from "123" --to "456" "test123test"
 test456test
 
-$ echo "test123test" | morph --from "\d+" --to "789"
+$ echo "test123test" | sarlac --from "\d+" --to "789"
 test789test
 
-$ echo "test123regex" | morph -f "(.*)\d+(.*)" -t "\1789\2"
+$ echo "test123regex" | sarlac -f "(.*)\d+(.*)" -t "\1789\2"
 test789regex
 ```
 
@@ -63,11 +63,11 @@ test789regex
 
 YAML config with order of precedence:
 
-1. environment variable (MORPH_CONFIG) set to configuration file location
-2. home directory with a .morph.yaml file
-3. /usr/local/etc/morph.yaml
+1. environment variable (SARLAC_CONFIG) set to configuration file location
+2. home directory with a .sarlac.yaml file
+3. /usr/local/etc/sarlac.yaml
 
-Configuration file example - `morph.yaml`:
+Configuration file example - `sarlac.yaml`:
 
 ```yaml
 ---
@@ -119,4 +119,4 @@ TODO
 
 ## Authors
 
-`python_morph` was written by `Greg Horie <networkserf@gmail.com>`
+`python_sarlac` was written by `Greg Horie <networkserf@gmail.com>`
