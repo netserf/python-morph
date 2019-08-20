@@ -1,5 +1,5 @@
 '''
-Auto-generated setup.py for python_morph package.
+Auto-generated setup.py for python_sarlac package.
 
 '''
 
@@ -20,9 +20,9 @@ def read(filename):
 
 
 setup(
-    name="python_morph",
+    name="python_sarlac",
     version="0.2.0",
-    url="https://github.com/netserf/python-morph",
+    url="https://github.com/netserf/python-sarlac",
     license='MIT',
 
     author="Greg Horie",
@@ -47,7 +47,7 @@ setup(
 
     entry_points={
         "console_scripts": [
-            "morph=python_morph.morph:main"
+            "sarlac=python_sarlac.sarlac:main"
         ]
     },
 
