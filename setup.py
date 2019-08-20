@@ -35,7 +35,21 @@ setup(
 
     packages=find_packages(exclude=('tests',)),
 
-    install_requires=[],
+    install_requires=[
+        'pyyaml',
+        'click'
+    ],
+
+    tests_require=[
+        'pytest',
+        'pytest-mock'
+    ],
+
+    entry_points={
+        "console_scripts": [
+            "morph=python_morph.morph:main"
+        ]
+    },
 
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',
