@@ -2,6 +2,8 @@
 Test suite for the morph command line tool.
 '''
 
+# pylint: disable=protected-access
+
 from pathlib import Path
 import os
 import re
@@ -9,7 +11,6 @@ from unittest.mock import patch
 from click.testing import CliRunner
 import pytest
 import python_morph.morph as morph
-
 
 def test_get_config_filename_from_env():
     '''test that config file can be set with environment variable MORPH_CONFIG'''

@@ -1,3 +1,8 @@
+'''
+Auto-generated setup.py for python_morph package.
+
+'''
+
 import io
 import os
 import re
@@ -7,10 +12,11 @@ from setuptools import setup
 
 
 def read(filename):
+    '''helper to read long description out of README.md'''
     filename = os.path.join(os.path.dirname(__file__), filename)
     text_type = type(u"")
-    with io.open(filename, mode="r", encoding='utf-8') as fd:
-        return re.sub(text_type(r':[a-z]+:`~?(.*?)`'), text_type(r'``\1``'), fd.read())
+    with io.open(filename, mode="r", encoding='utf-8') as infile:
+        return re.sub(text_type(r':[a-z]+:`~?(.*?)`'), text_type(r'``\1``'), infile.read())
 
 
 setup(
@@ -22,7 +28,9 @@ setup(
     author="Greg Horie",
     author_email="networkserf@gmail.com",
 
-    description="For those that don't like the one-liner awk or perl options, this is a command line tool that helps you manage your string transformations through a yaml config file.",
+    description="For those that don't like the one-liner awk or perl options, " \
+        "this is a command line tool that helps you manage your string" \
+        "transformations through a yaml config file.",
     long_description=read("README.md"),
 
     packages=find_packages(exclude=('tests',)),
