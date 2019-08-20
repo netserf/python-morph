@@ -21,11 +21,13 @@ import os
 import re
 import yaml
 import click
+from python_morph.__init__ import __version__
 
 
 @click.command()
 @click.option('-m', '--match', 'match_pattern')
 @click.option('-r', '--replace', 'replace_pattern')
+@click.version_option(version=__version__)
 @click.argument('cli_args', nargs=-1)
 def main(match_pattern, replace_pattern, cli_args):
     '''A tool to help manage string transformations through a yaml config file
@@ -65,6 +67,7 @@ def _get_config_filename():
         configfile = envfile
     return configfile
 
+
 def _process_input(sub_rules, cli_args):
     # process piped stdin input
     if cli_args[-1] == "-":
@@ -87,6 +90,7 @@ def _run_subs(sub_rules, instr):
             return re.sub(rule['match'], rule['replace'], instr)
     return None
 
+
 def _parse_config(configfile):
     '''parse config file and return it as a set of rules that will be used in
     the match/replace logic'''
@@ -98,4 +102,4 @@ def _parse_config(configfile):
 
 
 if __name__ == '__main__':
-    main()
+    main()  # pylint: disable=no-value-for-parameter

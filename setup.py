@@ -1,3 +1,8 @@
+'''
+Auto-generated setup.py for python_morph package.
+
+'''
+
 import io
 import os
 import re
@@ -7,27 +12,44 @@ from setuptools import setup
 
 
 def read(filename):
+    '''helper to read long description out of README.md'''
     filename = os.path.join(os.path.dirname(__file__), filename)
     text_type = type(u"")
-    with io.open(filename, mode="r", encoding='utf-8') as fd:
-        return re.sub(text_type(r':[a-z]+:`~?(.*?)`'), text_type(r'``\1``'), fd.read())
+    with io.open(filename, mode="r", encoding='utf-8') as infile:
+        return re.sub(text_type(r':[a-z]+:`~?(.*?)`'), text_type(r'``\1``'), infile.read())
 
 
 setup(
     name="python_morph",
-    version="0.1.0",
+    version="0.2.0",
     url="https://github.com/netserf/python-morph",
     license='MIT',
 
     author="Greg Horie",
     author_email="networkserf@gmail.com",
 
-    description="For those that don't like the one-liner awk or perl options, this is a command line tool that helps you manage your string transformations through a yaml config file.",
+    description="For those that don't like the one-liner awk or perl options, " \
+        "this is a command line tool that helps you manage your string" \
+        "transformations through a yaml config file.",
     long_description=read("README.md"),
 
     packages=find_packages(exclude=('tests',)),
 
-    install_requires=[],
+    install_requires=[
+        'pyyaml',
+        'click'
+    ],
+
+    tests_require=[
+        'pytest',
+        'pytest-mock'
+    ],
+
+    entry_points={
+        "console_scripts": [
+            "morph=python_morph.morph:main"
+        ]
+    },
 
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',
