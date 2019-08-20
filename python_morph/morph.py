@@ -21,14 +21,14 @@ import os
 import re
 import yaml
 import click
-from __init__ import __version__
+from python_morph.__init__ import __version__
 
 @click.command()
 @click.option('-m', '--match', 'match_pattern')
 @click.option('-r', '--replace', 'replace_pattern')
 @click.version_option(version=__version__)
 @click.argument('cli_args', nargs=-1)
-def main(match_pattern, replace_pattern, version, cli_args):
+def main(match_pattern, replace_pattern, cli_args):
     '''A tool to help manage string transformations through a yaml config file
     and some understanding of regular expressions.'''
     sub_rules = _generate_cli_adhoc_rules(match_pattern, replace_pattern)
