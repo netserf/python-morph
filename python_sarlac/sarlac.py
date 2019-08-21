@@ -24,19 +24,34 @@ import click
 from python_sarlac.__init__ import __version__
 
 
+def _print_help(ctx, param, value):  # pylint: disable=unused-argument
+    '''click help output overridden to allow for help as the default (no
+    argument) option on the command line'''
+    if value is False:
+        return
+    click.echo(ctx.get_help())
+    ctx.exit()
+
+
 @click.command()
-@click.option('-m', '--match', 'match_pattern')
-@click.option('-r', '--replace', 'replace_pattern')
+@click.option('-h', '--help', is_flag=True, expose_value=False, is_eager=False, \
+    callback=_print_help, help='Print help message.')
+@click.option('-m', '--match', 'match_pattern', help='Ad-hoc match regex.')
+@click.option('-r', '--replace', 'replace_pattern', help='Regex replacement.')
 @click.version_option(version=__version__)
 @click.argument('cli_args', nargs=-1)
-def main(match_pattern, replace_pattern, cli_args):
+@click.pass_context
+def main(ctx, match_pattern, replace_pattern, cli_args):
     '''A tool to help manage string transformations through a yaml config file
     and some understanding of regular expressions.'''
+    if not match_pattern and not replace_pattern and not cli_args:
+        _print_help(ctx, None, value=True)
     sub_rules = _generate_cli_adhoc_rules(match_pattern, replace_pattern)
     config = _get_config_filename()
     if not sub_rules:
         sub_rules = _parse_config(config)
     _process_input(sub_rules, cli_args)
+    ctx.exit()
 
 
 def _generate_cli_adhoc_rules(match_pattern, replace_pattern):
