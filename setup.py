@@ -21,7 +21,7 @@ def read(filename):
 
 setup(
     name="python_sarlac",
-    version="0.2.0",
+    version="0.2.1",
     url="https://github.com/netserf/python-sarlac",
     license='MIT',
 
