@@ -116,3 +116,12 @@ def test_main_cli_thru_stdin():
     result = runner.invoke(sarlac.main, cli_input, input="testmatch")
     assert result.exit_code == 0
     assert result.output == "replaced\n"
+
+
+@pytest.mark.parametrize('cli_input', [(), ('--help'), ('-h')])
+def test_main_cli_no_input_invokes_help(cli_input):
+    '''test scenarios where help is called'''
+    runner = CliRunner()
+    result = runner.invoke(sarlac.main, cli_input)
+    assert result.exit_code == 0
+    assert result.output.startswith('Usage:')

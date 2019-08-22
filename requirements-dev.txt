@@ -2,6 +2,8 @@
 pytest
 pytest-mock
 pytest-pylint
+pytest-cov
 bumpversion
 setuptools
 wheel
+coverage
