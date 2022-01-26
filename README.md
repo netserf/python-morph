@@ -14,10 +14,10 @@ There are 2 ways the string transformations will be handled:
 1. YAML configuration with an order of precedence:
 
     1. environment variable (SARLAC_CONFIG) set to configuration file location
-    2. home directory with a .sarlac.yaml file
-    3. /usr/local/etc/sarlac.yaml
+    1. home directory with a .sarlac.yaml file
+    1. /usr/local/etc/sarlac.yaml
 
-2. CLI args for single ad-hoc transformations
+1. CLI args for single ad-hoc transformations
 
 Argument lists and stdin are both acceptable ways to input the string(s) to be
 transformed.
@@ -67,8 +67,8 @@ test789regex
 YAML config with order of precedence:
 
 1. environment variable (SARLAC_CONFIG) set to configuration file location
-2. home directory with a .sarlac.yaml file
-3. /usr/local/etc/sarlac.yaml
+1. home directory with a .sarlac.yaml file
+1. /usr/local/etc/sarlac.yaml
 
 Configuration file example - `sarlac.yaml`:
 
@@ -117,8 +117,6 @@ python setup.py test
 ## Future Improvements
 
 TODO
-
-## Licence
 
 ## Authors
 
