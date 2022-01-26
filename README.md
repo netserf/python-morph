@@ -2,6 +2,7 @@
 
 [![Actions Status](https://github.com/netserf/python-sarlac/workflows/Test/badge.svg)](https://github.com/netserf/python-sarlac/actions)
 [![Actions Status](https://github.com/netserf/python-sarlac/workflows/Markdown%20Lint/badge.svg)](https://github.com/netserf/python-sarlac/actions)
+[![Actions Status](https://github.com/netserf/python-sarlac/workflows/Markdown%20Links/badge.svg)](https://github.com/netserf/python-sarlac/actions)
 
 ## What?
 
