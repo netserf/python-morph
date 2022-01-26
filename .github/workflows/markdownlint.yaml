@@ -1,14 +1,14 @@
-name: Markdown Links
+name: Markdown Lint
 
-on:
-  push:
-    branches: ['master']
-  pull_request:
-    branches: ['master']
+on: [push, pull_request]
 
 jobs:
-  markdown-link-check:
+  delivery:
+
     runs-on: ubuntu-latest
+
     steps:
-    - uses: actions/checkout@master
-    - uses: gaurav-nelson/github-action-markdown-link-check@v1
+    - name: Check out code
+      uses: actions/checkout@v2
+    - name: Run mdl
+      uses: actionshub/markdownlint@main
