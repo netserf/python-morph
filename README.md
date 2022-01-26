@@ -1,5 +1,8 @@
 # python_sarlac v.0.2.2
 
+[![Actions Status](https://github.com/netserf/python-sarlac/workflows/Test/badge.svg)](https://github.com/netserf/python-sarlac/actions)
+[![Actions Status](https://github.com/netserf/python-sarlac/workflows/Markdown%20Lint/badge.svg)](https://github.com/netserf/python-sarlac/actions)
+
 ## What?
 
 For those that don't like the one-liner awk or perl options, this is a command
