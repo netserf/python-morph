@@ -1,5 +1,8 @@
 # python_sarlac v.0.2.2
 
+[![Actions Status](https://github.com/netserf/python-sarlac/workflows/Test/badge.svg)](https://github.com/netserf/python-sarlac/actions)
+[![Actions Status](https://github.com/netserf/python-sarlac/workflows/Markdown%20Lint/badge.svg)](https://github.com/netserf/python-sarlac/actions)
+
 ## What?
 
 For those that don't like the one-liner awk or perl options, this is a command
@@ -11,10 +14,10 @@ There are 2 ways the string transformations will be handled:
 1. YAML configuration with an order of precedence:
 
     1. environment variable (SARLAC_CONFIG) set to configuration file location
-    2. home directory with a .sarlac.yaml file
-    3. /usr/local/etc/sarlac.yaml
+    1. home directory with a .sarlac.yaml file
+    1. /usr/local/etc/sarlac.yaml
 
-2. CLI args for single ad-hoc transformations
+1. CLI args for single ad-hoc transformations
 
 Argument lists and stdin are both acceptable ways to input the string(s) to be
 transformed.
@@ -64,8 +67,8 @@ test789regex
 YAML config with order of precedence:
 
 1. environment variable (SARLAC_CONFIG) set to configuration file location
-2. home directory with a .sarlac.yaml file
-3. /usr/local/etc/sarlac.yaml
+1. home directory with a .sarlac.yaml file
+1. /usr/local/etc/sarlac.yaml
 
 Configuration file example - `sarlac.yaml`:
 
@@ -89,16 +92,16 @@ substitutions:
 To build the wheel file:
 
 ```bash
-$ pip install --upgrade setuptools wheel
-$ pip install -r requirements-dev.txt
-$ python setup.py bdist_wheel
+pip install --upgrade setuptools wheel
+pip install -r requirements-dev.txt
+python setup.py bdist_wheel
 ```
 
 To install the package:
 
 ```bash
-$ pip install -r requirements.txt
-$ pip install dist/[whl file] [--force-reinstall]
+pip install -r requirements.txt
+pip install dist/[whl file] [--force-reinstall]
 ```
 
 ### Testing
@@ -114,8 +117,6 @@ python setup.py test
 ## Future Improvements
 
 TODO
-
-## Licence
 
 ## Authors
 
