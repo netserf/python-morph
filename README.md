@@ -89,16 +89,16 @@ substitutions:
 To build the wheel file:
 
 ```bash
-$ pip install --upgrade setuptools wheel
-$ pip install -r requirements-dev.txt
-$ python setup.py bdist_wheel
+pip install --upgrade setuptools wheel
+pip install -r requirements-dev.txt
+python setup.py bdist_wheel
 ```
 
 To install the package:
 
 ```bash
-$ pip install -r requirements.txt
-$ pip install dist/[whl file] [--force-reinstall]
+pip install -r requirements.txt
+pip install dist/[whl file] [--force-reinstall]
 ```
 
 ### Testing
